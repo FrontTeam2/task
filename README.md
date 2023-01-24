@@ -12,7 +12,7 @@
 주제 : 예약 번호찾기
 - 동영(filter(item) / for) <br>
 - 하늘(if / for) <br>
-- 태찬(if, for) <br>
+- 태찬(if / for) <br>
 
 ### level2 테스트 불합격
 - form 태그 내 button를 클릭했을 때, value값이 사라지는 것을 막지 못 하였고, 일치하지 않는 정보만 호출되는 오류 발생
