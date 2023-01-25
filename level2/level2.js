@@ -12,23 +12,22 @@ const resultlist = document.getElementById('reservation-number');
 const checkbtn = document.querySelector('form > button');
 
 function cusfilter(e) {
-    let arr = [];
     e.preventDefault();
-    const result = RESERVATION_LIST.filter((item) => {
-        for (let i = 0; i < item.name.length; i++) {
-            if (item.name == name.value) {
-                if (item.phone === phone.value) {
-                    return item.number;
-                } else {
-                    return '휴대폰 번호를 확인하세요';
-                }
-            } else {
-                return '일치하는 결과가 없습니다';
+    const result = RESERVATION_LIST.filter(function (item) {
+        // for (let i = 0; i < item.name.length; i++) {
+        if (item.name == name.value) {
+            if (item.phone == phone.value) {
+                return item;
             }
+            // }
         }
     });
     console.log(result);
-    resultlist.innerText = result[1];
+    if (result == '') {
+        resultlist.innerText = `일치하는 정보가 없음`;
+    } else {
+        resultlist.innerText = result[0].number;
+    }
 }
 
 checkbtn.addEventListener('click', cusfilter);
