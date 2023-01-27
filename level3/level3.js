@@ -70,9 +70,20 @@ function modifying(event) {
     function okaymodi() {
         ing.readOnly = true;
         wei.readOnly = true;
+        for (let i = 0; i < finallist.length; i++) {
+            // 최종리스트 배열 값 초기화
+            if (
+                finallist[i].ingrement == modilist.ing &&
+                finallist[i].weight == modilist.wei
+            ) {
+                finallist[i].ingrement = ing.value;
+                finallist[i].weight = wei.value;
+            }
+        }
         modilist.ing = ing.value; // 수정후 값으로 초기화
         modilist.wei = wei.value;
         changebtn();
+        console.log(finallist);
     }
     function cancelmodi() {
         ing.readOnly = true;
@@ -166,9 +177,25 @@ function inputIng(event) {
 }
 function finalsubmit() {
     const tbody = Array.from(document.querySelectorAll('.tbody'));
+    const tbodymom = document.querySelectorAll('.tbody');
     console.log(tbody);
     if (tbody == '') {
         alert('제출할 내용이 없습니다');
+    } else {
+        for (let i = 0; finallist.length; i++) {
+            // for문을 통해 최종배열속 내용을 순서대로 제출
+            const li = document.createElement('li');
+            const span = document.createElement('span');
+            span.innerText = `재료명 : ${finallist[i].ingrement}
+                                갯수 : ${finallist[i].weight}`;
+
+            li.appendChild(span);
+            ul.appendChild(li);
+        }
+        finallist = []; // 제출 된 뒤 최종 배열 삭제
+        for (let i = 0; i < tbodymom.length; i++) {
+            tbodymom[i].remove();
+        }
     }
 }
 btn.addEventListener('click', inputIng);
