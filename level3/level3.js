@@ -13,16 +13,25 @@ const ul = document.getElementById('ingredient-list');
 const finalbtn = document.getElementById('submit_button');
 
 let finallist = []; // 제출전 마지막 데이터 담을 배열.
+// 만든 이유...? 함수 내에서 사용된 변수는 return을 하지 않을 경우 해당 변수는 종료 즉시 사라짐.
+// 그래서 재료명과 리스트들을 관리하기 위해서는 전역에서 사용할 변수를 만들어주고 함수 내에서 변화된 변수의 값을
+// 반영시키기 위해..
 
 function finallistsave(ing, wei) {
     const finallistObj = {
-        ingrement: ing,
+        ingredient: ing,
         weight: wei,
     };
     finallist.push(finallistObj);
     //기존에 있던 값들을 수정 할때는 어떻게 초기화 해줘야할까?
     //1. 삭제할때 (완료)
-    //2. 수정할때 (생각중...)
+    //2. 수정할때 (완료)
+    // 삭제 및 수정을 할때 동일한 재료명과 동일한 무게가 2개 (a,b)이상 있을시 a,b 초기화가 되는 경우가 발생 =>
+    //  ex)  수박 20개(a)
+    //      수박 20개 (b)
+    //  a만 10개로 수정했을때 화면상에는 a만 수박 10개로 수정 되어 있지만 finallist에서는 b도 동일하게 10개로 수정됨.
+    //  이럴때 각 배열에 고유번호를 부여해서 고유번호까지 일치하는 조건을 달아줘서 관리하면 될듯..
+    //  일단 테이블에는 입고날짜 및 고유번호가 없기때문에 작성은 안하는걸로^
 }
 
 function deleteing(event) {
@@ -33,10 +42,13 @@ function deleteing(event) {
     // 최종리스트 내용과 삭제할 목록이 일치하지 않은것만 반환해서 초기화
     finallist = finallist.filter(
         (finallistObj) =>
-            finallistObj.ingrement != ing.value &&
+            finallistObj.ingredient != ing.value &&
             finallistObj.weight != wei.value
     );
-    // if (finallistObj.ingrement != ing.value) {
+    //finallistObj는 finallist에 담겨있는 배열의 객체.
+    // ing.value와 wei.value는 삭제 버튼을 클릭했을시 해당되는 tr의 재료와 무게의 값
+
+    // if (finallistObj.ingredient != ing.value) {
     //     if (finallistObj.wei !== wei.value) {
     //         return finallistObj;
     //     }
@@ -71,12 +83,12 @@ function modifying(event) {
         ing.readOnly = true;
         wei.readOnly = true;
         for (let i = 0; i < finallist.length; i++) {
-            // 최종리스트 배열 값 초기화
+            // finallist 배열 값 초기화
             if (
-                finallist[i].ingrement == modilist.ing &&
+                finallist[i].ingredient == modilist.ing &&
                 finallist[i].weight == modilist.wei
             ) {
-                finallist[i].ingrement = ing.value;
+                finallist[i].ingredient = ing.value;
                 finallist[i].weight = wei.value;
             }
         }
@@ -88,7 +100,7 @@ function modifying(event) {
     function cancelmodi() {
         ing.readOnly = true;
         wei.readOnly = true;
-        ing.value = modilist.ing; // 수정전 값으로 되돌리기
+        ing.value = modilist.ing; // 수정전 값으로 되돌리기 // 수정된 값이 없기때문에 finallist 변화를 줄 필요는 없음.
         wei.value = modilist.wei;
         changebtn();
     }
@@ -181,13 +193,15 @@ function finalsubmit() {
     console.log(tbody);
     if (tbody == '') {
         alert('제출할 내용이 없습니다');
-    } else {
-        for (let i = 0; finallist.length; i++) {
+    } else if (finallist != null && finallist != undefined) {
+        for (let i = 0; i < finallist.length; i++) {
             // for문을 통해 최종배열속 내용을 순서대로 제출
             const li = document.createElement('li');
+
             const span = document.createElement('span');
-            span.innerText = `재료명 : ${finallist[i].ingrement}
-                                갯수 : ${finallist[i].weight}`;
+            console.log(finallist[i].ingredient);
+            span.innerText = `재료명 : ${finallist[i].ingredient}
+                                용량 : ${finallist[i].weight}`;
 
             li.appendChild(span);
             ul.appendChild(li);
