@@ -17,10 +17,11 @@ let finallist = []; // 제출전 마지막 데이터 담을 배열.
 // 그래서 재료명과 리스트들을 관리하기 위해서는 전역에서 사용할 변수를 만들어주고 함수 내에서 변화된 변수의 값을
 // 반영시키기 위해..
 
-function finallistsave(ing, wei) {
+function finallistsave(ing, wei, id) {
     const finallistObj = {
         ingredient: ing,
         weight: wei,
+        id: id,
     };
     finallist.push(finallistObj);
     //기존에 있던 값들을 수정 할때는 어떻게 초기화 해줘야할까?
@@ -58,13 +59,15 @@ function deleteing(event) {
 }
 function modifying(event) {
     const tr = event.target.parentElement.parentElement;
+    console.log(tr);
     const ing = tr.querySelector('td:nth-child(1)> input');
     const wei = tr.querySelector('td:nth-child(2) > input');
 
     const modilist = {
         // 수정전 값 초기화
-        ing: ing.value,
+        ing: ing.value, //수박 1키로
         wei: wei.value,
+        id: ing.id,
     };
 
     const manage = tr.querySelector('td:nth-child(3)');
@@ -83,10 +86,12 @@ function modifying(event) {
         ing.readOnly = true;
         wei.readOnly = true;
         for (let i = 0; i < finallist.length; i++) {
+            // 수박 1키로 modilist.key value
             // finallist 배열 값 초기화
             if (
-                finallist[i].ingredient == modilist.ing &&
-                finallist[i].weight == modilist.wei
+                modilist.ing == finallist[i].ingredient && // 수박 1키로 [0] a
+                modilist.wei == finallist[i].weight &&
+                modilist.id == finallist[i].id //수박 1키로[1] b <
             ) {
                 finallist[i].ingredient = ing.value;
                 finallist[i].weight = wei.value;
@@ -123,6 +128,7 @@ function paint(newlist) {
     const inginput = document.createElement('input');
     inginput.setAttribute('type', 'text');
     inginput.setAttribute('value', `${newlist.ing}`);
+    inginput.setAttribute('id', `${newlist.id}`);
     inginput.setAttribute('readonly', true);
     td1.appendChild(inginput);
     const td2 = document.createElement('td'); // 용량 영역
@@ -154,7 +160,7 @@ function paint(newlist) {
     tr.appendChild(td1); // 테이블에 입력한 재료명 용량 및 관리버튼 넘겨주기.
     tr.appendChild(td2);
     tr.appendChild(td3);
-    finallistsave(newlist.ing, newlist.wei); // 최초 서버에 저장..?
+    finallistsave(newlist.ing, newlist.wei, newlist.id); // 최초 서버에 저장..?
     console.log(finallist);
     del.addEventListener('click', deleteing); //삭제이벤트
     modi.addEventListener('click', modifying); // 수정 이벤트
@@ -168,6 +174,7 @@ function inputIng(event) {
     const newlist = {
         ing: newing,
         wei: newwei,
+        id: Date.now(),
     };
 
     if (newlist.ing == '' && newlist.wei == '') {
@@ -191,7 +198,7 @@ function finalsubmit() {
     const tbody = Array.from(document.querySelectorAll('.tbody'));
     const tbodymom = document.querySelectorAll('.tbody');
     console.log(tbody);
-    if (tbody == '') {
+    if (tbody == '' || tbody == null || tbody == undefined) {
         alert('제출할 내용이 없습니다');
     } else if (finallist != null && finallist != undefined) {
         for (let i = 0; i < finallist.length; i++) {
@@ -207,8 +214,8 @@ function finalsubmit() {
             ul.appendChild(li);
         }
         finallist = []; // 제출 된 뒤 최종 배열 삭제
-        for (let i = 0; i < tbodymom.length; i++) {
-            tbodymom[i].remove();
+        for (let i = 0; i < tbody.length; i++) {
+            tbody[i].remove();
         }
     }
 }
