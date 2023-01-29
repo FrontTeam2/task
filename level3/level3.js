@@ -31,8 +31,7 @@ function finallistsave(ing, wei, id) {
     //  ex)  수박 20개(a)
     //      수박 20개 (b)
     //  a만 10개로 수정했을때 화면상에는 a만 수박 10개로 수정 되어 있지만 finallist에서는 b도 동일하게 10개로 수정됨.
-    //  이럴때 각 배열에 고유번호를 부여해서 고유번호까지 일치하는 조건을 달아줘서 관리하면 될듯..
-    //  일단 테이블에는 입고날짜 및 고유번호가 없기때문에 작성은 안하는걸로^
+    //  이럴때 각 배열에 고유번호를 부여해서 고유번호까지 일치하는 조건을 달아줘서 관리하면 될듯..(해결완료)
 }
 
 function deleteing(event) {
@@ -86,12 +85,11 @@ function modifying(event) {
         ing.readOnly = true;
         wei.readOnly = true;
         for (let i = 0; i < finallist.length; i++) {
-            // 수박 1키로 modilist.key value
             // finallist 배열 값 초기화
             if (
-                modilist.ing == finallist[i].ingredient && // 수박 1키로 [0] a
+                modilist.ing == finallist[i].ingredient &&
                 modilist.wei == finallist[i].weight &&
-                modilist.id == finallist[i].id //수박 1키로[1] b <
+                modilist.id == finallist[i].id
             ) {
                 finallist[i].ingredient = ing.value;
                 finallist[i].weight = wei.value;
