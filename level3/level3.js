@@ -28,6 +28,7 @@ function callBackFunc(newObj) {
 function addItem(e) {
     e.preventDefault();
     const $itemNewList = document.createElement("tr");
+    $itemNewList.classList.add("tbody");
 
     const $newItem01 = document.createElement("td");
     const $newItem01_Input = document.createElement("input");
@@ -101,22 +102,29 @@ function addItem(e) {
 
     $modifyBtn.addEventListener("click", modifyItem);
     $deleteBtn.addEventListener("click", deleteItem);
+}
 
-    function submitItem(e) {
-        for (let i = 0; i < finalist.length; i++) {
-            const $submitItemContents = document.createElement("li");
-            const $submitItemText = document.createElement("span");
-            // $submitItemList
-            $submitItemText.innerText = `재료 : ${finalist[i].ingre} / 무게 : ${finalist[i].weig}`;
+function submitItem(e) {
+    const tbody = document.querySelectorAll(".tbody");
+    console.log(tbody);
 
-            $submitItemContents.append($submitItemText);
-            $submitItemList.append($submitItemContents);
-        }
-        $itemNewList.remove();
-        console.log(finalist.length);
+    for (let i = 0; i < finalist.length; i++) {
+        const $submitItemContents = document.createElement("li");
+        const $submitItemText = document.createElement("span");
+        // $submitItemList
+        $submitItemText.innerText = `재료 : ${finalist[i].ingre} / 무게 : ${finalist[i].weig}`;
+
+        $submitItemContents.append($submitItemText);
+        $submitItemList.append($submitItemContents);
     }
 
-    $submitBtn.addEventListener("click", submitItem);
+    for (let i = 0; i < tbody.length; i++) {
+        tbody[i].remove();
+    }
+
+    console.log(finalist.length);
 }
+
+$submitBtn.addEventListener("click", submitItem);
 
 $addBtn.addEventListener("click", addItem);
