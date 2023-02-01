@@ -72,7 +72,7 @@ const makePage = (num) => {
 
     pages.addEventListener('click', (e) => {
         // 페이지버튼을 클릭했을때
-        for (let i = 0; i < showPage; i++) {
+        for (let i = 0; i < $page_list.children.length; i++) {
             if (pages.dataset.num) {
                 $page_list.children[i].classList.remove('active');
             }
