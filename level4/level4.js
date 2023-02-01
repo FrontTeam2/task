@@ -68,15 +68,17 @@ const makepage = (num) => {
     li.innerText = num;
 
     li.addEventListener('click', (e) => {
-        for (let i = 0; i < maxpage; i++) {
-            console.log(e.target.dataset.num);
-            if (e.target.dataset.num) {
-                e.target.focus();
-                paintcontent(e.target.dataset.num);
-                break;
-            } else {
+        for (let i = 0; i < showpage; i++) {
+            if ($page_list.children[i].dataset.num) {
+                $page_list.children[i].classList.remove('active');
             }
         }
+
+        // Array.prototype.forEach.call($page_list.children, (li) => { foreach 방식
+        //     if (li.dataset.num) li.classList.remove('active');
+        // });
+        e.target.classList.add('active');
+        paintcontent(parseInt(e.target.dataset.num));
     });
     return li;
 };
@@ -102,16 +104,16 @@ const paintpage = (page) => {
     for (let num = page; num < page + showpage && num <= maxpage; num++) {
         $page_list.appendChild(makepage(num));
     }
-    $page_list.children[0].focus();
+    $page_list.children[0].classList.add('active');
 };
 
 pre.addEventListener('click', () => {
     page -= showpage;
     if (page < 1) {
         page = parseInt(maxpage / 10) * 10 + 1;
-        paintpage(page);
+        render(page);
     } else {
-        paintpage(page);
+        render(page);
     }
 });
 
@@ -119,9 +121,9 @@ next.addEventListener('click', () => {
     page += showpage;
     if (page > maxpage) {
         page = 1;
-        paintpage(page);
+        render(page);
     } else {
-        paintpage(page);
+        render(page);
     }
 });
 
