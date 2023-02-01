@@ -12,17 +12,18 @@ const $submitBtn = document.querySelector("#submit_button");
 let finalist = [];
 console.log(finalist);
 
-function finallistSave(ing, wei) {
+function finallistSave(ing, wei, id) {
     const finallistObj = {
         ingre: ing,
         weig: wei,
+        id: id,
     };
     finalist.push(finallistObj);
     console.log(finalist);
 }
 
 function callBackFunc(newObj) {
-    finallistSave(newObj.ing, newObj.wei);
+    finallistSave(newObj.ing, newObj.wei, newObj.id);
 }
 
 function addItem(e) {
@@ -62,6 +63,7 @@ function addItem(e) {
     const newObj = {
         ing: $newItem01_Input.value,
         wei: $newItem02_Input.value,
+        id: Date.now(),
     };
 
     if (newObj.ing == "" && newObj.wei == "") {
@@ -77,23 +79,71 @@ function addItem(e) {
     }
 
     const $modifyBtn = document.createElement("button");
+    const $completeBtn = document.createElement("button");
     const $deleteBtn = document.createElement("button");
     $newItem03.append($modifyBtn);
+    $newItem03.append($completeBtn);
     $newItem03.append($deleteBtn);
+    $completeBtn.style.display = "none";
 
     $modifyBtn.innerText = `수정`;
     $deleteBtn.innerText = `삭제`;
+    $completeBtn.innerText = `완료`;
 
-    function modifyItem() {
-        if ($modifyBtn.innerText === `수정`) {
-            $newItem01_Input.readOnly = false;
-            $newItem02_Input.readOnly = false;
-            $modifyBtn.innerText = `완료`;
-        } else if ($modifyBtn.innerText === `완료`) {
+    function modifyItem(e) {
+        $newItem01_Input.readOnly = false;
+        $newItem02_Input.readOnly = false;
+        const tr = e.target.parentElement.parentElement;
+        console.log(tr);
+        const ing = tr.querySelector("td:nth-child(1) > input");
+        const wei = tr.querySelector("td:nth-child(2) > input");
+        console.log(ing);
+        console.log(wei);
+
+        const modiList = {
+            modi_ing: ing.value, // 수정 이전 값
+            modi_wei: wei.value,
+            modi_id: ing.id,
+        };
+        console.log(modiList.modi_wei);
+
+        $modifyBtn.style.display = "none";
+        $completeBtn.style.display = "inline-block";
+
+        // if ($modifyBtn.innerText === `수정`) {
+        //     $newItem01_Input.readOnly = false;
+        //     $newItem02_Input.readOnly = false;
+        //     $modifyBtn.innerText = `완료`;
+        // } else if ($modifyBtn.innerText === `완료`) {
+        //     $newItem01_Input.readOnly = true;
+        //     $newItem02_Input.readOnly = true;
+        //     $modifyBtn.innerText = `수정`;
+
+        // }
+
+        function modiComp() {
             $newItem01_Input.readOnly = true;
             $newItem02_Input.readOnly = true;
-            $modifyBtn.innerText = `수정`;
+            for (let i = 0; i < finalist.length; i++) {
+                if (
+                    modiList.modi_ing == finalist[i].ingre &&
+                    modiList.modi_wei == finalist[i].weig &&
+                    modiList.modi_id == finalist[i].id
+                ) {
+                    finalist[i].ingre = ing.value;
+                    finalist[i].weig = wei.value;
+                }
+                console.log(modiList.modi_wei);
+            }
+
+            modiList.modi_ing = ing.value;
+            modiList.modi_wei = wei.value;
         }
+
+        console.log(modiList.modi_wei);
+        console.log(finalist);
+
+        $completeBtn.addEventListener("click", modiComp);
     }
 
     function deleteItem() {
@@ -118,6 +168,8 @@ function submitItem(e) {
         $submitItemList.append($submitItemContents);
     }
 
+    finalist = [];
+
     for (let i = 0; i < tbody.length; i++) {
         tbody[i].remove();
     }
@@ -126,5 +178,4 @@ function submitItem(e) {
 }
 
 $submitBtn.addEventListener("click", submitItem);
-
 $addBtn.addEventListener("click", addItem);
