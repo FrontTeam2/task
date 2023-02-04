@@ -18,6 +18,15 @@ const $prev = $nav_list.querySelector('.btn_nav.pre');
 console.log($next);
 console.log($prev);
 
+const getClock = () => {
+    //작성일
+    const date = new Date();
+
+    const years = String(date.getFullYear());
+    const months = String(date.getMonth() + 1).padStart(2, '0');
+    const days = String(date.getDate()).padStart(2, '0');
+    return `${years}-${months}-${days}`;
+};
 // prev 버튼 불러오기
 
 const makeHead = () => {
@@ -54,7 +63,7 @@ const makeContent = (num) => {
     const $tbody_title = document.createElement('td');
     $tbody_title.innerText = '테스트제목입니다';
     const $tbody_date = document.createElement('td');
-    $tbody_date.innerText = ' 2023-01-30';
+    $tbody_date.innerText = getClock();
 
     $table_body.appendChild($tbody_num);
     $table_body.appendChild($tbody_writer);
