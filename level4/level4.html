@@ -7,6 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script defer type="module" src="./level4.js"></script>
   <style>
+    ul {
+      list-style: none;
+    }
+
+    .post_list>li {
+      display: flex;
+      justify-content: center;
+    }
+
+    .post_num,
+    .post_title,
+    .post_content,
+    .post_author,
+    .post_date {
+      flex-basis: 12%;
+    }
+
     .nav_list {
       float: none;
       width: 100%;
@@ -37,7 +54,7 @@
 
     .nav_list .nav_page.on,
     .nav_list .nav_page:hover,
-    .nav_list .nav_page:focus {
+    .nav_list .nav_page.active {
       color: #fff;
       border: 1px solid #b2b2b2;
       background: #c5c5c5;
@@ -65,12 +82,12 @@
 </head>
 
 <body>
-  <ul class="content_list">
+  <ul class="post_list">
 
   </ul>
   <div class="nav_list">
     <a class="btn_nav pre ir"></a>
-    <span class="page_list"> </span>
+    <span class="page_list"></span>
     <a class="btn_nav next ir"></a>
   </div>
 </body>
